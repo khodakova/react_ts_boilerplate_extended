@@ -8,7 +8,6 @@ import PageLoading from '@src/components/pageLoading';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App: React.FC = () => {
-
     return (
         <Router>
             <Suspense fallback={ <PageLoading show/> }>

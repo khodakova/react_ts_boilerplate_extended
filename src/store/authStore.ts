@@ -76,10 +76,7 @@ class AuthStore {
      * Выход из приложения с удалением токена и очищением информации по пользователю
      */
     logout() {
-        store.commonStore.setIsAuth(false);
-        store.commonStore.removeToken();
-        store.commonStore.removeUser();
-        this.reset();
+        store.commonStore.reset();
         history.push('/login');
     }
 }

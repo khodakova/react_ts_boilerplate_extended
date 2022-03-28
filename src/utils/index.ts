@@ -1,4 +1,4 @@
-import { getToken} from '@src/helpers/token';
+import { getToken} from '@src/helpers/localStorage';
 import { isEqual } from 'lodash';
 
 /*

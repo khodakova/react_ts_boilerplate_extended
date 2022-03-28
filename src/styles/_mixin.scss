@@ -27,3 +27,25 @@
         @content;
     }
 }
+
+@mixin headerItemAnimation() {
+    @keyframes scaleAnimation {
+        from {
+            transform: scale(.5) translateX(50%);
+        }
+        to {
+            transform: scale(1) translateX(50%);
+        }
+    }
+}
+
+@mixin expandAnimation() {
+    @keyframes expandAnimation {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
+    }
+}

@@ -5,7 +5,11 @@ const Main: React.FC = () => {
 
     return (
         <div id='main'>
-            <AppRouter/>
+            <div className='home'>
+                <div className='container'>
+                    <AppRouter/>
+                </div>
+            </div>
         </div>
     );
 };

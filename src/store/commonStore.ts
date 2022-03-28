@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { IUser, ServerError } from '@src/types';
-import { deleteToken, getToken, saveToken } from '@src/helpers/token';
+import { deleteToken, getToken, saveToken } from '@src/helpers/localStorage';
+import { HEADERS, IMenuItem } from '@src/router';
 
 class CommonStore {
     error: ServerError | null = null;
@@ -9,6 +10,8 @@ class CommonStore {
     isAuth = false;
     appLoaded = false;
     pageIndex = 0;
+    isSidepanelVisible = false;
+    section: IMenuItem = HEADERS[0];
 
     constructor() {
         makeAutoObservable(this);
@@ -67,8 +70,18 @@ class CommonStore {
      * @param index
      */
     setPageIndex = (index: number) => {
-        // console.log(index);
         this.pageIndex = index;
+    };
+
+    /**
+     * Изменение состояния видимости бокового меню
+     */
+    setIsSidepanelVisible = () => {
+        this.isSidepanelVisible = !this.isSidepanelVisible;
+    };
+
+    setSection = (section: IMenuItem) => {
+        this.section = section;
     };
 
     /**
@@ -76,6 +89,13 @@ class CommonStore {
      */
     checkAuth = () => {
         this.setIsAuth(!!getToken());
+    };
+
+    reset = () => {
+        this.setIsAuth(false);
+        this.removeToken();
+        this.removeUser();
+        this.isSidepanelVisible = false;
     }
 }
 

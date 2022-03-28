@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCapsLock } from '@src/hooks/useCapsLock';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useStore } from '@src/store/store';
 import { history } from '@src/index';
+import PasswordVisible from '@icons/password-visible.svg';
+import PasswordNotVisible from '@icons/password-not-visible.svg';
 
 // схема валидации для вывода ошибок при вводе
 const validationSchema = yup.object({
@@ -20,8 +22,9 @@ interface ICredentials {
 
 const Login: React.FC = () => {
     const { authStore } = useStore();
-
     const { caps, onKeyDown } = useCapsLock();
+    const [passVisible, setPassVisible] = useState(false);
+
     const formik = useFormik({
         initialValues: {
             password: '',
@@ -33,6 +36,10 @@ const Login: React.FC = () => {
         },
     });
 
+    const handleClick = () => {
+        setPassVisible(!passVisible);
+    };
+
     return (
         <div className='login'>
             <div className='bg'/>
@@ -42,22 +49,34 @@ const Login: React.FC = () => {
                 </header>
                 <div className='inputs'>
                     { caps && <div className='inputs__warning'>Включен CAPS LOCK</div> }
-                    <input
-                        type='password'
-                        placeholder='Введите пароль'
-                        onKeyDown={ onKeyDown }
-                        value={ formik.values.password }
-                        onChange={ formik.handleChange }
-                        name={ 'password' }
-                    />
+                    <div className='inputs__item'>
+                        <input
+                            type={ passVisible ? 'text' : 'password' }
+                            placeholder='Введите пароль'
+                            onKeyDown={ onKeyDown }
+                            value={ formik.values.password }
+                            onChange={ formik.handleChange }
+                            name={ 'password' }
+                        />
+                        <div
+                            className='inputs__icon'
+                            onClick={ handleClick }
+                        >
+                            {
+                                passVisible
+                                    ? <PasswordVisible fill='#fff'/>
+                                    : <PasswordNotVisible fill='#fff'/>
+                            }
+                        </div>
+                    </div>
                     {
                         formik.touched.password && formik.errors.password &&
                         <div className='inputs__error'>
                             { formik.errors.password }
                         </div>
                     }
+                    <button>Войти</button>
                 </div>
-                <button>Войти</button>
             </form>
         </div>
     );

@@ -18,6 +18,7 @@ export const useOpen = () => {
     }, []);
 
     useEffect(() => {
+        console.log('addeventlistener')
         document.addEventListener('keydown', escFunction, false);
         return () => {
             document.removeEventListener('keydown', escFunction, false);

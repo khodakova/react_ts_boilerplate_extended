@@ -5,6 +5,7 @@ import Footer from './footer';
 import Main from './main';
 import { useStore } from '@src/store/store';
 import { observer } from 'mobx-react-lite';
+import SidepanelMenu from '@src/layouts/sidepanelMenu';
 
 const Layout: React.FC = () => {
     const { commonStore: { isAuth } } = useStore();
@@ -12,6 +13,7 @@ const Layout: React.FC = () => {
     return (
         <Fragment>
             { isAuth && <Header/> }
+            { isAuth && <SidepanelMenu/> }
             <Main/>
             <Footer/>
         </Fragment>

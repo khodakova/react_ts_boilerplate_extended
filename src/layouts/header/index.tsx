@@ -1,37 +1,32 @@
-import React, { useState } from 'react';
-import { goURL } from '@src/helpers/router';
-import { useOpen } from '@src/hooks/useOpen';
-
-interface IMenuItem {
-    name: string;
-    href: string;
-    label: string;
-}
-
-export const HEADERS: Array<IMenuItem> = [
-    {
-        name: '1',
-        href: '#',
-        label: 'Menu 1',
-    },
-    {
-        name: '2',
-        href: '#',
-        label: 'Menu 2',
-    },
-];
+import React, { useEffect } from 'react';
+import LogoutSvg from '@icons/logout.svg';
+import { HEADERS } from '@src/router';
+import { useStore } from '@src/store/store';
+import { Link, useLocation } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 const Header: React.FC = () => {
-    const [ section, setSection ] = useState(HEADERS[0]);
-    const { open, handleOpen, handleClose } = useOpen();
+    const { commonStore: { section, setSection } } = useStore();
+    const location = useLocation();
+
+    useEffect(() => {
+        const foundSection = HEADERS.find(item =>
+            item.to === location.pathname) || HEADERS[0];
+        setSection(foundSection);
+    }, []);
+
+    const {
+        commonStore: { setIsSidepanelVisible },
+        authStore: { logout },
+    } = useStore();
 
     return (
         <>
-            <header className='header fixed'>
+            <header className='header'>
                 <div className='logo-header'>
-                    <div onClick={ () => goURL('/') } className='box-img-flex'>
+                    <Link to='/' className='box-img-flex'>
                         <img width={ 60 } src='/static/images/logo.png' alt='logo'/>
-                    </div>
+                    </Link>
                 </div>
                 <div className='menu'>
                     <ul>
@@ -41,16 +36,19 @@ const Header: React.FC = () => {
                                 key={ item.name }
                                 className={ section.name === item.name ? 'active' : '' }
                             >
-                                <a href={ item.href }>
+                                <Link to={ item.to }>
                                     <span>{ item.label }</span>
-                                </a>
+                                </Link>
                             </li>
                         )) }
+                        <li onClick={ logout }>
+                            <LogoutSvg className='header__logout'/>
+                        </li>
                     </ul>
                 </div>
                 <a
-                    onClick={ () => handleOpen(true) }
-                    className='btn-menu-mobile'
+                    onClick={ setIsSidepanelVisible }
+                    className='btn-menu-burger'
                     href='#'
                 >
                     <span></span>
@@ -58,34 +56,8 @@ const Header: React.FC = () => {
                     <span></span>
                 </a>
             </header>
-
-            <div
-                className={ `mobile-menu ${ open ? 'show' : '' }` }
-                onClick={ (e) => e.stopPropagation() }
-            >
-                <div className='m-menu__title'>
-                    <a
-                        onClick={ handleClose }
-                        href='#'
-                        className='m-menu-close'
-                    >
-                        +
-                    </a>
-                </div>
-                <ul>
-                    { HEADERS.map(item => (
-                        <li key={ item.name }>
-                            <a href={ item.href }>{ item.label }</a>
-                        </li>
-                    )) }
-                </ul>
-            </div>
-            <div
-                className={ `overlay-menu ${ open ? 'active' : '' }` }
-                onClick={ handleClose }
-            />
         </>
     );
 };
 
-export default Header;
+export default observer(Header);

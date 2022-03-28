@@ -1,20 +1,10 @@
-.home {
-  min-height: 40vh;
+.dashboard {
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-bottom: 80px;
-  padding-top: 40px;
-
-  .select-language {
-    margin: 12px auto;
-
-    .lang-item {
-      display: flex;
-      align-items: center;
-    }
-  }
+  flex-direction: column;
+  padding-top: 100px;
 
   .title {
     font-size: 26px;
@@ -23,12 +13,6 @@
 
   .keywords {
     margin-top: 52px;
-  }
-
-  .aldenn {
-    a {
-      color: $link-color;
-    }
   }
 
   .label {
@@ -52,4 +36,5 @@
   .label-item.info {
     background-color: #00aefd;
   }
+
 }

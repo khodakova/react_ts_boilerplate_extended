@@ -1,6 +1,7 @@
+@include headerItemAnimation;
 .header {
-  box-shadow: 0 0px 19px 0px #0000001a;
-  padding: 0px 20px;
+  box-shadow: 0 0 19px 0 #0000001a;
+  padding: 0 30px;
   display: flex;
   height: 70px;
 
@@ -33,7 +34,6 @@
   }
 
   .menu {
-    height: 80px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -46,6 +46,7 @@
       li {
         padding: 8px 10px;
         list-style-type: none;
+
         @include mobile {
           & {
             display: none;
@@ -55,7 +56,25 @@
 
         &.active a {
           color: $primary-color;
-          border-bottom: 2px solid $primary-color;
+          position: relative;
+
+          &:before {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: $primary-color;
+            border-radius: 2px;
+            left: -50%;
+            transform: translateX(50%);
+            top: 30px;
+            position: absolute;
+            animation: headerItemAnimation .3s linear;
+          }
+
+          &:hover {
+            color: $second-color;
+          }
         }
 
         &.button-github {
@@ -91,9 +110,21 @@
       }
     }
   }
+
+  &__logout {
+    fill: $primary-color;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+
+    &:hover {
+      fill: $second-color;
+      transform: scale(1.1);
+    }
+  }
 }
 
-.btn-menu-mobile {
+.btn-menu-burger {
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -119,131 +150,11 @@
   }
 }
 
-.mobile-menu {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: -85%;
-  width: 85%;
-  max-width: 400px;
-  background-color: #ffff;
-  box-sizing: border-box;
-  font-size: 14px;
-  transition: 0.2s;
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 999;
-
-  &.show {
-    right: 0;
-  }
-
-  .m-menu__title {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    color: rgba(255, 255, 255, 0.5);
-
-    .m-menu-close {
-      padding: 0;
-      font-size: 26px;
-      width: 32px;
-      height: 32px;
-      text-align: center;
-      line-height: 22px;
-      text-decoration: none;
-      color: $primary-color;
-      transform: rotate(45deg);
-      position: absolute;
-      top: 8px;
-      right: 8px;
-    }
-  }
-
-  ul {
-    margin: 0;
-    padding-left: 0;
-
-    li {
-      position: relative;
-      list-style-type: none;
-
-      &.active > a {
-        color: #00b140;
-      }
-
-      &.has-submenu a {
-        padding-right: 35px;
-        position: relative;
-
-        .btn-toggle-sub {
-          width: 40px;
-          height: 42px;
-          max-height: 100%;
-          position: absolute;
-          top: 0;
-          right: 0;
-          color: #000;
-          z-index: 2;
-        }
-
-        .btn-toggle-sub:before {
-          content: '+';
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          transition: 0.2s;
-          font-size: 18px;
-        }
-
-        .sub-menu {
-          padding-left: 20px;
-          display: none;
-
-          li {
-            a {
-              font-size: 14px;
-            }
-          }
-        }
-      }
-
-      a {
-        color: $primary-color;
-        text-decoration: none;
-        display: block;
-        padding: 11px 20px;
-        transition: 0.2s;
-        line-height: 1.3;
-
-        &::before {
-          content: '';
-          border-bottom: 1px solid rgba($primary-color, 0.8);
-          display: block;
-          position: absolute;
-          left: 20px;
-          right: 0;
-          bottom: 0;
-        }
-      }
-    }
-  }
-}
-
-.overlay-menu.active {
-  &.active {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    transition: 0.5s;
-    z-index: 888;
-  }
-}
+//@keyframes scaleAnimation {
+//  from {
+//    transform: scale(.5) translateX(50%);
+//  }
+//  to {
+//    transform: scale(1) translateX(50%);
+//  }
+//}
