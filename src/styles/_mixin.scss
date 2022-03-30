@@ -29,7 +29,7 @@
 }
 
 @mixin headerItemAnimation() {
-    @keyframes scaleAnimation {
+    @keyframes headerItemAnimation {
         from {
             transform: scale(.5) translateX(50%);
         }

@@ -1,23 +1,41 @@
-import React, { Fragment } from 'react';
+import {observer} from 'mobx-react-lite';
+import React, {Fragment, useEffect} from 'react';
+import {useLocation} from 'react-router';
 
-import Header from './header';
-import Footer from './footer';
-import Main from './main';
-import { useStore } from '@src/store/store';
-import { observer } from 'mobx-react-lite';
 import SidepanelMenu from '@src/layouts/sidepanelMenu';
+import Login from '@src/pages/login';
+import {HEADERS} from '@src/router';
+import {useStore} from '@src/store/store';
+
+import Footer from './footer';
+import Header from './header';
+import Main from './main';
 
 const Layout: React.FC = () => {
-    const { commonStore: { isAuth } } = useStore();
+    const {
+        commonStore: {isAuth, setSection},
+    } = useStore();
 
-    return (
-        <Fragment>
-            { isAuth && <Header/> }
-            { isAuth && <SidepanelMenu/> }
-            <Main/>
-            <Footer/>
-        </Fragment>
-    );
+    const location = useLocation();
+
+    useEffect(() => {
+        const foundSection =
+            HEADERS.find((item) => item.to === location.pathname) || HEADERS[0];
+        setSection(foundSection);
+    }, []);
+
+    if (isAuth) {
+        return (
+            <Fragment>
+                <Header />
+                <SidepanelMenu />
+                <Main />
+                <Footer />
+            </Fragment>
+        );
+    }
+
+    return <Login />;
 };
 
 export default observer(Layout);

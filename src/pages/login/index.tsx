@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { useCapsLock } from '@src/hooks/useCapsLock';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { useStore } from '@src/store/store';
-import { history } from '@src/index';
-import PasswordVisible from '@icons/password-visible.svg';
 import PasswordNotVisible from '@icons/password-not-visible.svg';
+import PasswordVisible from '@icons/password-visible.svg';
+import {useFormik} from 'formik';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import * as yup from 'yup';
+
+import {useCapsLock} from '@src/hooks/useCapsLock';
+import {HEADERS, RouteNames} from '@src/router';
+import {useStore} from '@src/store/store';
+
+import logo from '@images/logo.png';
 
 // схема валидации для вывода ошибок при вводе
 const validationSchema = yup.object({
@@ -17,13 +21,17 @@ const validationSchema = yup.object({
 });
 
 interface ICredentials {
-    password: string
+    password: string;
 }
 
 const Login: React.FC = () => {
-    const { authStore } = useStore();
-    const { caps, onKeyDown } = useCapsLock();
+    const {
+        authStore: {login},
+        commonStore: {setSection},
+    } = useStore();
+    const {caps, onKeyDown} = useCapsLock();
     const [passVisible, setPassVisible] = useState(false);
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -31,8 +39,9 @@ const Login: React.FC = () => {
         },
         validationSchema: validationSchema,
         onSubmit: (values: ICredentials) => {
-            authStore.login(values.password)
-                .then(() => history.push('/'));
+            login(values.password)
+                .then(() => navigate(RouteNames.DASHBOARD))
+                .then(() => setSection(HEADERS[0]));
         },
     });
 
@@ -41,40 +50,38 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className='login'>
-            <div className='bg'/>
-            <form onSubmit={ formik.handleSubmit }>
+        <div className="login">
+            <div className="bg" />
+            <form onSubmit={formik.handleSubmit}>
                 <header>
-                    <img src='/static/images/logo.png'/>
+                    <img src={logo} />
                 </header>
-                <div className='inputs'>
-                    { caps && <div className='inputs__warning'>Включен CAPS LOCK</div> }
-                    <div className='inputs__item'>
+                <div className="inputs">
+                    {caps && (
+                        <div className="inputs__warning">Включен CAPS LOCK</div>
+                    )}
+                    <div className="inputs__item">
                         <input
-                            type={ passVisible ? 'text' : 'password' }
-                            placeholder='Введите пароль'
-                            onKeyDown={ onKeyDown }
-                            value={ formik.values.password }
-                            onChange={ formik.handleChange }
-                            name={ 'password' }
+                            type={passVisible ? 'text' : 'password'}
+                            placeholder="Введите пароль"
+                            onKeyDown={onKeyDown}
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            name={'password'}
                         />
-                        <div
-                            className='inputs__icon'
-                            onClick={ handleClick }
-                        >
-                            {
-                                passVisible
-                                    ? <PasswordVisible fill='#fff'/>
-                                    : <PasswordNotVisible fill='#fff'/>
-                            }
+                        <div className="inputs__icon" onClick={handleClick}>
+                            {passVisible ? (
+                                <PasswordVisible fill="#fff" />
+                            ) : (
+                                <PasswordNotVisible fill="#fff" />
+                            )}
                         </div>
                     </div>
-                    {
-                        formik.touched.password && formik.errors.password &&
-                        <div className='inputs__error'>
-                            { formik.errors.password }
+                    {formik.touched.password && formik.errors.password && (
+                        <div className="inputs__error">
+                            {formik.errors.password}
                         </div>
-                    }
+                    )}
                     <button>Войти</button>
                 </div>
             </form>
